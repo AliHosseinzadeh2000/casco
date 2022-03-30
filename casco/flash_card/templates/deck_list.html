@@ -11,7 +11,7 @@
     {% endfor %}
 {% endif %}
 
-<div style="float: right; margin-right: 10px; font-size: larger;"><a href="">create a new deck</a><br><br></div>
+<div style="float: right; margin-right: 10px; font-size: larger;"><a href="{% url 'flash_card:deck-create' %}">create a new deck</a><br><br></div>
 
 {% for item in object_list %}
     <div>
