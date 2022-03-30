@@ -10,8 +10,8 @@ class DeckCreateView(SuccessMessageMixin, CreateView):
     template_name = 'deck_create.html'
     form_class = DeckCreateForm
     success_url = reverse_lazy('flash_card:deck-list')
-
     success_message = '"%(title)s" was created successfully.'
+    
     def get_success_message(self, cleaned_data):
         return self.success_message % dict(
             cleaned_data,
@@ -45,8 +45,8 @@ class DeckUpdateView(SuccessMessageMixin, UpdateView):
     template_name = 'deck_update.html'
     form_class = DeckCreateForm
     success_url = reverse_lazy('flash_card:deck-list')
-
     success_message = '"%(title)s" was updated successfully.'
+    
     def get_success_message(self, cleaned_data):
         return self.success_message % dict(
             cleaned_data,
@@ -58,12 +58,13 @@ class DeckUpdateView(SuccessMessageMixin, UpdateView):
         return get_object_or_404(Deck, pk=pk)
 
 
+
 class DeckDeleteView(SuccessMessageMixin, DeleteView):
     template_name = 'deck_delete.html'
     model = Deck
     success_url = reverse_lazy('flash_card:deck-list')
-
     success_message = '"%(title)s" was deleted successfully.'
+    
     def get_success_message(self, cleaned_data):
         return self.success_message % dict(
             cleaned_data,
@@ -74,8 +75,8 @@ class DeckDeleteView(SuccessMessageMixin, DeleteView):
 class CardCreateView(SuccessMessageMixin, CreateView):
     template_name = 'card_create.html'
     form_class = CardCreateForm
-
     success_message = '"%(title)s" was created successfully.'
+    
     def get_success_message(self, cleaned_data):
         return self.success_message % dict(
             cleaned_data,
@@ -97,3 +98,20 @@ class CardCreateView(SuccessMessageMixin, CreateView):
         deck = get_object_or_404(Deck, pk=self.kwargs.get('pk'))
         context['deck'] = deck
         return context
+
+
+class CardDeleteView(SuccessMessageMixin, DeleteView):
+    template_name = 'card_delete.html'
+    model = Card
+    pk_url_kwarg = 'id'
+    success_message = '"%(title)s" was deleted successfully.'
+
+    def get_success_message(self, cleaned_data):
+        return self.success_message % dict(
+            cleaned_data,
+            title=self.object.title,
+        )
+
+    def get_success_url(self):
+        card = get_object_or_404(Card, id=self.kwargs.get('id'))
+        return reverse('flash_card:deck-detail', kwargs={'pk': card.deck.pk})

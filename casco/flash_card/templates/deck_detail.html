@@ -41,7 +41,7 @@
     <div class="myDIV" style="font-size: xx-large; width: 40%;">{{item.title}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <p style="font-size: medium; float: right;">created at:{{item.created_at}}</p></div>
     <div class="hide" style="font-size: xx-large;">{{item.answer}}</div>
     <div>
-      <a href=""><input type="button" value="Delete"></a>
+      <a href="{% url 'flash_card:card-delete' pk=item.deck.pk id=item.id %}"><input type="button" value="Delete"></a>
       <a href=""><input type="button" value="Update"></a>
     </div>
     ------------------------------------------------------------------------------------------------------------------------<br>
