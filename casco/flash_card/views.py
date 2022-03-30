@@ -24,6 +24,7 @@ class DeckListView(LoginRequiredMixin, ListView):
     login_url = '/account/login/'
     template_name = 'deck_list.html'
     queryset = Deck.objects.order_by('-updated_at')
+    paginate_by = 5
 
 
 class DeckDetailView(LoginRequiredMixin, DetailView):
