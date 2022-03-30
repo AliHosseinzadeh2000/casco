@@ -1,8 +1,8 @@
 from .models import Deck, Card
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.urls import reverse_lazy
-from .forms import DeckCreateForm
+from django.urls import reverse_lazy, reverse
+from .forms import DeckCreateForm, CardCreateForm
 from django.shortcuts import get_object_or_404
 
 
@@ -69,3 +69,31 @@ class DeckDeleteView(SuccessMessageMixin, DeleteView):
             cleaned_data,
             title=self.object.title,
         )
+
+
+class CardCreateView(SuccessMessageMixin, CreateView):
+    template_name = 'card_create.html'
+    form_class = CardCreateForm
+
+    success_message = '"%(title)s" was created successfully.'
+    def get_success_message(self, cleaned_data):
+        return self.success_message % dict(
+            cleaned_data,
+            title=self.object.title,
+        )
+
+    def get_success_url(self):
+        deck = get_object_or_404(Deck, pk=self.kwargs.get('pk'))
+        return reverse('flash_card:deck-detail', kwargs={'pk': deck.pk})
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        deck = get_object_or_404(Deck, pk=self.kwargs.get('pk'))
+        kwargs['deck'] = deck
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        deck = get_object_or_404(Deck, pk=self.kwargs.get('pk'))
+        context['deck'] = deck
+        return context
