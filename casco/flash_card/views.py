@@ -4,9 +4,10 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy, reverse
 from .forms import DeckCreateForm, CardCreateForm, CardUpdateForm
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class DeckCreateView(SuccessMessageMixin, CreateView):
+class DeckCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     template_name = 'deck_create.html'
     form_class = DeckCreateForm
     success_url = reverse_lazy('flash_card:deck-list')
@@ -19,12 +20,13 @@ class DeckCreateView(SuccessMessageMixin, CreateView):
         )
 
 
-class DeckListView(ListView):
+class DeckListView(LoginRequiredMixin, ListView):
+    login_url = '/account/login/'
     template_name = 'deck_list.html'
     queryset = Deck.objects.order_by('-updated_at')
 
 
-class DeckDetailView(DetailView):
+class DeckDetailView(LoginRequiredMixin, DetailView):
     template_name = 'deck_detail.html'
     model = Deck
 
@@ -41,7 +43,7 @@ class DeckDetailView(DetailView):
         return deck
 
 
-class DeckUpdateView(SuccessMessageMixin, UpdateView):
+class DeckUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     template_name = 'deck_update.html'
     form_class = DeckCreateForm
     success_url = reverse_lazy('flash_card:deck-list')
@@ -59,7 +61,7 @@ class DeckUpdateView(SuccessMessageMixin, UpdateView):
 
 
 
-class DeckDeleteView(SuccessMessageMixin, DeleteView):
+class DeckDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     template_name = 'deck_delete.html'
     model = Deck
     success_url = reverse_lazy('flash_card:deck-list')
@@ -72,7 +74,7 @@ class DeckDeleteView(SuccessMessageMixin, DeleteView):
         )
 
 
-class CardCreateView(SuccessMessageMixin, CreateView):
+class CardCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     template_name = 'card_create.html'
     form_class = CardCreateForm
     success_message = '"%(title)s" was created successfully.'
@@ -100,7 +102,7 @@ class CardCreateView(SuccessMessageMixin, CreateView):
         return context
 
 
-class CardUpdateView(SuccessMessageMixin, UpdateView):
+class CardUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     template_name = 'card_update.html'
     form_class = CardUpdateForm
     model = Card
@@ -118,7 +120,7 @@ class CardUpdateView(SuccessMessageMixin, UpdateView):
         return reverse('flash_card:deck-detail', kwargs={'pk': card.deck.pk})
 
 
-class CardDeleteView(SuccessMessageMixin, DeleteView):
+class CardDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     template_name = 'card_delete.html'
     model = Card
     pk_url_kwarg = 'id'
