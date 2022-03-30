@@ -29,3 +29,13 @@ class CardCreateForm(forms.ModelForm):
         obj = super().save(commit)
         obj.deck = self.deck
         return super().save(commit=True)
+
+
+class CardUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Card
+        fields = (
+            'title',
+            'answer',
+            'icon',
+        )

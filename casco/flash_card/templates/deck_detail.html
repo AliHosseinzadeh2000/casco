@@ -42,7 +42,7 @@
     <div class="hide" style="font-size: xx-large;">{{item.answer}}</div>
     <div>
       <a href="{% url 'flash_card:card-delete' pk=item.deck.pk id=item.id %}"><input type="button" value="Delete"></a>
-      <a href=""><input type="button" value="Update"></a>
+      <a href="{% url 'flash_card:card-update' pk=item.deck.pk id=item.id %}"><input type="button" value="Update"></a>
     </div>
     ------------------------------------------------------------------------------------------------------------------------<br>
   {% endfor %}

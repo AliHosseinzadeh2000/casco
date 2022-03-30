@@ -2,7 +2,7 @@ from .models import Deck, Card
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy, reverse
-from .forms import DeckCreateForm, CardCreateForm
+from .forms import DeckCreateForm, CardCreateForm, CardUpdateForm
 from django.shortcuts import get_object_or_404
 
 
@@ -98,6 +98,24 @@ class CardCreateView(SuccessMessageMixin, CreateView):
         deck = get_object_or_404(Deck, pk=self.kwargs.get('pk'))
         context['deck'] = deck
         return context
+
+
+class CardUpdateView(SuccessMessageMixin, UpdateView):
+    template_name = 'card_update.html'
+    form_class = CardUpdateForm
+    model = Card
+    pk_url_kwarg = 'id'
+    success_message = '"%(title)s" was updated successfully.'
+
+    def get_success_message(self, cleaned_data):
+        return self.success_message % dict(
+            cleaned_data,
+            title=self.object.title,
+        )
+
+    def get_success_url(self):
+        card = get_object_or_404(Card, id=self.kwargs.get('id'))
+        return reverse('flash_card:deck-detail', kwargs={'pk': card.deck.pk})
 
 
 class CardDeleteView(SuccessMessageMixin, DeleteView):

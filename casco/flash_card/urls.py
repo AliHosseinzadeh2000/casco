@@ -6,7 +6,8 @@ from .views import (
     DeckCreateView,
     DeckUpdateView,
     CardCreateView,
-    CardDeleteView
+    CardDeleteView,
+    CardUpdateView,
 )
 
 
@@ -19,5 +20,6 @@ urlpatterns = [
     path('decks/<int:pk>/delete/', DeckDeleteView.as_view(), name='deck-delete'),
 
     path('decks/<int:pk>/card-create/', CardCreateView.as_view(), name='card-create'),
+    path('decks/<int:pk>/card<int:id>-update/', CardUpdateView.as_view(), name='card-update'),
     path('decks/<int:pk>/card<int:id>-delete/', CardDeleteView.as_view(), name='card-delete'),
 ]
