@@ -1,8 +1,9 @@
 from .models import Deck, Card
-from django.views.generic import CreateView, ListView, DetailView, DeleteView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from .forms import DeckCreateForm
+from django.shortcuts import get_object_or_404
 
 
 class DeckCreateView(SuccessMessageMixin, CreateView):
@@ -38,6 +39,23 @@ class DeckDetailView(DetailView):
         deck.views_count += 1
         deck.save()
         return deck
+
+
+class DeckUpdateView(SuccessMessageMixin, UpdateView):
+    template_name = 'deck_update.html'
+    form_class = DeckCreateForm
+    success_url = reverse_lazy('flash_card:deck-list')
+
+    success_message = '"%(title)s" was updated successfully.'
+    def get_success_message(self, cleaned_data):
+        return self.success_message % dict(
+            cleaned_data,
+            title=self.object.title,
+        )
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(Deck, pk=pk)
 
 
 class DeckDeleteView(SuccessMessageMixin, DeleteView):

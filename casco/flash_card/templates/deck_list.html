@@ -27,7 +27,7 @@
         <div style="font-size: medium;">views: {{item.views_count}}</div>
         <div>
             <a href="{% url 'flash_card:deck-delete' item.pk %}"><input type="button" value="Delete"></a>
-            <a href=""><input type="button" value="Update"></a>
+            <a href="{% url 'flash_card:deck-update' item.pk %}"><input type="button" value="Update"></a>
         </div>
         -------------------------------------------------------------------<br>
     </div>     
