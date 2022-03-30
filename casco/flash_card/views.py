@@ -1,3 +1,7 @@
-from django.shortcuts import render
+from .models import Deck, Card
+from django.views.generic import ListView
 
-# Create your views here.
+
+class DeckListView(ListView):
+    template_name = 'deck_list.html'
+    queryset = Deck.objects.order_by('-updated_at')
