@@ -1,5 +1,7 @@
 from .models import Deck, Card
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, DeleteView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.urls import reverse_lazy
 
 
 class DeckListView(ListView):
@@ -22,3 +24,16 @@ class DeckDetailView(DetailView):
         deck.views_count += 1
         deck.save()
         return deck
+
+
+class DeckDeleteView(SuccessMessageMixin, DeleteView):
+    template_name = 'deck_delete.html'
+    model = Deck
+    success_url = reverse_lazy('flash_card:deck-list')
+
+    success_message = '"%(title)s" was deleted successfully.'
+    def get_success_message(self, cleaned_data):
+        return self.success_message % dict(
+            cleaned_data,
+            title=self.object.title,
+        )
